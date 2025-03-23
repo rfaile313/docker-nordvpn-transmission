@@ -1,0 +1,24 @@
+version: '3'
+services:
+  transmission-vpn:
+    build: .
+    container_name: transmission-vpn
+    cap_add:
+      - NET_ADMIN
+      - SYS_ADMIN
+      - SYS_MODULE
+    devices:
+      - /dev/net/tun
+    environment:
+      NORDVPN_TOKEN: "your_nordvpn_token_goes_here"  # Replace with your actual token
+      LOCAL_NETWORK: "192.168.0.0/24"  # Replace with your actual LAN subnet
+    ports:
+      - "9091:9091"
+      - "51413:51413"
+    volumes:
+      - /home/your_user/docker-nordvpn-transmission/downloads:/var/lib/transmission/downloads
+      - /home/your_user/docker-nordvpn-transmission/incomplete:/var/lib/transmission/incomplete
+      - /home/your_user/docker-nordvpn-transmission/info:/var/lib/transmission-daemon/info
+      - /home/your_user/docker-nordvpn-transmission/config:/config
+    restart: unless-stopped
+
