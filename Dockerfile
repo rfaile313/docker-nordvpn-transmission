@@ -32,6 +32,13 @@ RUN wget -qO - https://repo.nordvpn.com/gpg/nordvpn_public.asc | apt-key add - &
 RUN apt-get update && \
     apt-get install -y nordvpn
 
+# note(rudy) NordVPN v3.18+ moved the background service to a systemd-managed socket
+# so pin this at 3.17
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        nordvpn=3.17.4* && \
+    echo "nordvpn hold" | dpkg --set-selections
+
 # Clean up
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
